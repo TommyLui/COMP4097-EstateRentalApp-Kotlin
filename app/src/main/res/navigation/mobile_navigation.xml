@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="edu.hkbu.comp.comp4097.estaterentalapp.ui.home.HomeFragment"
+        android:name="edu.hkbu.comp.comp4097.estaterentalapp.ui.Houses.HousesFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
@@ -27,6 +27,11 @@
         android:name="edu.hkbu.comp.comp4097.estaterentalapp.userFragment"
         android:label="@string/title_user"
         tools:layout="@layout/fragment_user" />
+    <fragment
+        android:id="@+id/housesFragment"
+        android:name="edu.hkbu.comp.comp4097.estaterentalapp.ui.Houses.HousesFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_houses_list" />
 
 
 </navigation>

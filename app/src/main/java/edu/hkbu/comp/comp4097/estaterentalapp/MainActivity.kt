@@ -1,6 +1,7 @@
 package edu.hkbu.comp.comp4097.estaterentalapp
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
@@ -11,6 +12,14 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import edu.hkbu.comp.comp4097.estaterentalapp.data.Houses
+import edu.hkbu.comp.comp4097.estaterentalapp.ui.Houses.HousesListRecyclerViewAdapter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,5 +49,4 @@ class MainActivity : AppCompatActivity() {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
     }
-
 }

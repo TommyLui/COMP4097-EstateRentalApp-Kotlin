@@ -11,12 +11,12 @@
         android:layout_height="match_parent">
 
         <EditText
-            android:id="@+id/editTextTextPersonName"
+            android:id="@+id/usernameetext"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="UserName"
             android:inputType="textPersonName"
-            android:text="Username"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
@@ -25,23 +25,23 @@
             app:layout_constraintVertical_bias="0.169" />
 
         <EditText
-            android:id="@+id/editTextTextPersonName2"
+            android:id="@+id/passwordetext"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:autoText="false"
             android:ems="10"
+            android:hint="Password"
             android:inputType="textPersonName"
-            android:text="Password"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName"
+            app:layout_constraintTop_toBottomOf="@+id/usernameetext"
             app:layout_constraintVertical_bias="0.0" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/loginbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -49,7 +49,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2"
+            app:layout_constraintTop_toBottomOf="@+id/passwordetext"
             app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

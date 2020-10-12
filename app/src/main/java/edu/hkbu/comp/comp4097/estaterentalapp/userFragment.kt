@@ -45,6 +45,7 @@ class userFragment : Fragment() {
             val intent = Intent (getActivity(), loginActivity::class.java)
             getActivity()?.startActivity(intent)
         }
+
         return mView
     }
 }
