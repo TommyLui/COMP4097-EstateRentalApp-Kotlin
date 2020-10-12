@@ -10,4 +10,6 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".ui.Houses.HousesFragment"
-    tools:listitem="@layout/fragment_houses_item" />
+    tools:listitem="@layout/fragment_houses_item"
+    android:paddingBottom="?actionBarSize"
+    />

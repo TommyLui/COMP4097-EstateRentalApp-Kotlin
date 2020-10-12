@@ -1,6 +1,6 @@
 package edu.hkbu.comp.comp4097.estaterentalapp.data
 
-class Houses(
+data class Houses(
     val createdAt: String,
      val updatedAt: String,
      val id: String,

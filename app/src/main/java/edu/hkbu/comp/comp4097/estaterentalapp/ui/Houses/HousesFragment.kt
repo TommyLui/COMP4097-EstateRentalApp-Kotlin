@@ -1,19 +1,21 @@
 package edu.hkbu.comp.comp4097.estaterentalapp.ui.Houses
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import edu.hkbu.comp.comp4097.estaterentalapp.MainActivity
-import edu.hkbu.comp.comp4097.estaterentalapp.R
-import edu.hkbu.comp.comp4097.estaterentalapp.funClass
-import edu.hkbu.comp.comp4097.estaterentalapp.loginActivity
-import edu.hkbu.comp.comp4097.estaterentalapp.ui.Houses.dummy.DummyContent
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import edu.hkbu.comp.comp4097.estaterentalapp.*
+import edu.hkbu.comp.comp4097.estaterentalapp.data.Houses
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * A fragment representing a list of Items.
@@ -40,16 +42,36 @@ class HousesFragment : Fragment() {
         swipeLayout.addView(recyclerView)
         swipeLayout.setOnRefreshListener {
             swipeLayout.isRefreshing = true
-            funClass.reloadData(recyclerView)
+            reloadData(recyclerView)
             swipeLayout.isRefreshing = false
         }
         recyclerView.layoutManager = LinearLayoutManager(context)
-        funClass.reloadData(recyclerView)
+        reloadData(recyclerView)
         return swipeLayout
     }
 
-    companion object {
+    private fun reloadData(recyclerView: RecyclerView) {
+        val HOUSES_URL = "https://morning-plains-00409.herokuapp.com/property/json"
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val json = Network.getTextFromNetwork(HOUSES_URL)
+                val houses = Gson().fromJson<List<Houses>>(json,object :
+                    TypeToken<List<Houses>>() {}.type)
+                CoroutineScope(Dispatchers.Main).launch {
+                    recyclerView.adapter = HousesListRecyclerViewAdapter(houses)
+                }
+            } catch (e: Exception) {
+                Log.d("HousesFragment", "Error in loading data")
+                val houses =
+                        listOf(Houses("", "", "","Please check your network connection","Cannot fetch houses", "","","","","","",""))
+                CoroutineScope(Dispatchers.Main).launch {
+                    recyclerView.adapter = HousesListRecyclerViewAdapter(houses)
+                }
+            }
+        }
+    }
 
+    companion object {
         // TODO: Customize parameter argument names
         const val ARG_COLUMN_COUNT = "column-count"
 
