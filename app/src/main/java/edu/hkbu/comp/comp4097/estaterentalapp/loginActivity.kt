@@ -1,13 +1,24 @@
 package edu.hkbu.comp.comp4097.estaterentalapp
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import edu.hkbu.comp.comp4097.estaterentalapp.data.AccountInfo
+import edu.hkbu.comp.comp4097.estaterentalapp.data.Houses
+import edu.hkbu.comp.comp4097.estaterentalapp.ui.Houses.HousesListRecyclerViewAdapter
+import edu.hkbu.comp.comp4097.estaterentalapp.ui.Houses.Network
 import kotlinx.android.synthetic.main.layout_login_page.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 
 class loginActivity : AppCompatActivity() {
@@ -27,26 +38,39 @@ class loginActivity : AppCompatActivity() {
             sharedPreferences.edit()
                 .putString("account", loginetext.text.toString())
                 .putString("password", passwordetext.text.toString())
-                .putString("loginState", "logout")
-//                .putString("loginState", "login")
                 .apply()
 
-            Toast.makeText(this, (sharedPreferences.getString("account", "")), Toast.LENGTH_SHORT).show()
-//            Toast.makeText(this, (sharedPreferences.getString("password", "")), Toast.LENGTH_SHORT).show()
-//            Toast.makeText(this, (sharedPreferences.getString("loginState", "")), Toast.LENGTH_SHORT).show()
-
-//            Fragment currentFragment = getActivity().getFragmentManager().findFragmentById(R.id.fragment_container);
-//            if (currentFragment instanceof "NAME OF YOUR FRAGMENT CLASS") {
-//                FragmentTransaction fragTransaction =   (getActivity()).getFragmentManager().beginTransaction();
-//                fragTransaction.detach(currentFragment);
-//                fragTransaction.attach(currentFragment);
-//                fragTransaction.commit();}
-//              }
-
+            login(loginetext.text.toString(), passwordetext.text.toString())
         }
     }
 
-
-
+    fun login(userName: String, password: String){
+        val LOGIN_URL = "https://morning-plains-00409.herokuapp.com/user/login"
+        CoroutineScope(Dispatchers.IO).launch {
+                val json = Network.userLogin(LOGIN_URL, userName, password)
+                if (json.toString() != "error") {
+                    Log.d("Network", "login checkpoint 4")
+//                Log.d("Network", json.toString())
+                    val accountInfo = Gson().fromJson<AccountInfo>(json, object :
+                        TypeToken<AccountInfo>() {}.type)
+                    Log.d("Network", "login checkpoint 5")
+//                Log.d("Network", accountInfo.toString())
+                    var sharedPreferences = getSharedPreferences("loginInfo", Context.MODE_PRIVATE)
+                    sharedPreferences.edit()
+                        .putString("loginState", "login")
+                        .putString("username", accountInfo.username.toString())
+                        .putString("userIcon", accountInfo.avatar.toString())
+                        .apply()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        Toast.makeText(this@loginActivity, "Login successful!", Toast.LENGTH_SHORT).show()
+                    }
+                    finish()
+                }else{
+                    CoroutineScope(Dispatchers.Main).launch {
+                        Toast.makeText(this@loginActivity, "Login fail!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+        }
+    }
 
 }

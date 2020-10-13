@@ -55,13 +55,17 @@ class HousesFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val json = Network.getTextFromNetwork(HOUSES_URL)
+                Log.d("Network",  "house checkpoint 4")
+//                Log.d("Network",  json.toString())
                 val houses = Gson().fromJson<List<Houses>>(json,object :
                     TypeToken<List<Houses>>() {}.type)
+                Log.d("Network",  "house checkpoint 5")
+//                Log.d("Network",  houses.toString())
                 CoroutineScope(Dispatchers.Main).launch {
                     recyclerView.adapter = HousesListRecyclerViewAdapter(houses)
                 }
             } catch (e: Exception) {
-                Log.d("HousesFragment", "Error in loading data")
+                Log.d("Network", "Error in loading data")
                 val houses =
                         listOf(Houses("", "", "","Please check your network connection","Cannot fetch houses", "","","","","","",""))
                 CoroutineScope(Dispatchers.Main).launch {

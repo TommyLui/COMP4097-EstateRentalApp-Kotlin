@@ -2,16 +2,17 @@ package edu.hkbu.comp.comp4097.estaterentalapp
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
-import kotlinx.android.synthetic.main.layout_login_page.view.*
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.layout_user_function.view.*
+import java.net.URL
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -30,6 +31,7 @@ class userFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
     }
 
     lateinit var myView: View
@@ -40,20 +42,6 @@ class userFragment : Fragment() {
     ): View? {
         myView = inflater.inflate(R.layout.layout_user_function, container, false)
 
-        myView.loginPageBtn.setOnClickListener {
-            val intent = Intent(getActivity(), loginActivity::class.java)
-            getActivity()?.startActivity(intent)
-        }
-
-        val sharedPreferences = this.requireActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE)
-        var account = sharedPreferences.getString("account", "")
-        var password = sharedPreferences.getString("password", "")
-        var loginState = sharedPreferences.getString("loginState", "")
-
-        myView.debugbtn.setOnClickListener {
-            Toast.makeText(getActivity(), loginState.toString(), Toast.LENGTH_SHORT).show()
-        }
-
         return myView
     }
 
@@ -61,17 +49,33 @@ class userFragment : Fragment() {
         super.onResume()
 
         val sharedPreferences = this.requireActivity().getSharedPreferences("loginInfo", Context.MODE_PRIVATE)
-        var account = sharedPreferences.getString("account", "")
-        var password = sharedPreferences.getString("password", "")
         var loginState = sharedPreferences.getString("loginState", "")
+        var userIcon = sharedPreferences.getString("userIcon", "")
+        var username = sharedPreferences.getString("username", "")
+
+        myView.loginPageBtn.setOnClickListener {
+            if (loginState == "logout") {
+                val intent = Intent(getActivity(), loginActivity::class.java)
+                getActivity()?.startActivity(intent)
+            }else{
+                val intent = Intent(getActivity(), logoutActivity::class.java)
+                getActivity()?.startActivity(intent)
+            }
+        }
+
+        myView.debugbtn.setOnClickListener {
+            Toast.makeText(getActivity(), loginState.toString(), Toast.LENGTH_SHORT).show()
+        }
+
+        Log.d("Network", "State: ${loginState}")
 
         if (loginState == "logout"){
             myView.userIcon.setImageResource(R.mipmap.man_foreground);
             myView.userName.setText("User Name")
         }
         else if (loginState == "login"){
-            myView.userIcon.setImageResource(R.drawable.ic_baseline_perm_identity_24);
-            myView.userName.setText("logined name")
+            Picasso.get().load(userIcon).into(myView.userIcon)
+            myView.userName.setText(username)
         }
     }
 
