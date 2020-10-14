@@ -65,6 +65,7 @@ class Network {
                 Log.d("Network", "${url}, logout checkpoint 1")
                 val connection =
                     URL(url).openConnection() as HttpURLConnection
+                connection.requestMethod = "POST"
 //                connection.setRequestProperty("Accept", "application/json")
                 Log.d("Network", "responseCode: " + connection.responseCode.toString())
                 Log.d("Network",  "logout checkpoint 2")

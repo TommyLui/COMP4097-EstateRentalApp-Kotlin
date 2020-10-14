@@ -1,17 +1,12 @@
 package edu.hkbu.comp.comp4097.estaterentalapp
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import edu.hkbu.comp.comp4097.estaterentalapp.data.AccountInfo
-import edu.hkbu.comp.comp4097.estaterentalapp.data.Houses
-import edu.hkbu.comp.comp4097.estaterentalapp.ui.Houses.HousesListRecyclerViewAdapter
 import edu.hkbu.comp.comp4097.estaterentalapp.ui.Houses.Network
 import kotlinx.android.synthetic.main.layout_login_page.*
 import kotlinx.coroutines.CoroutineScope

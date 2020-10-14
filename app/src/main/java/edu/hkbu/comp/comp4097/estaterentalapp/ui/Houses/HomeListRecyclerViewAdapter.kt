@@ -16,9 +16,9 @@ import edu.hkbu.comp.comp4097.estaterentalapp.ui.Houses.dummy.DummyContent.Dummy
  * [RecyclerView.Adapter] that can display a [DummyItem].
  * TODO: Replace the implementation with code for your data type.
  */
-class HousesListRecyclerViewAdapter(
+class HomeListRecyclerViewAdapter(
     private val values: List<Houses>
-) : RecyclerView.Adapter<HousesListRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<HomeListRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
