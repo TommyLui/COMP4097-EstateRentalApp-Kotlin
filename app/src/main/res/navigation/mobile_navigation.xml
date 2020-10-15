@@ -13,20 +13,34 @@
 
     <fragment
         android:id="@+id/HomeFragment"
-        android:name="edu.hkbu.comp.comp4097.estaterentalapp.ui.Houses.HomeFragment"
+        android:name="edu.hkbu.comp.comp4097.estaterentalapp.ui.Home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_houses_list" />
     <fragment
         android:id="@+id/EstateFragment"
         android:name="edu.hkbu.comp.comp4097.estaterentalapp.ui.Estate.EstateFragment"
         android:label="@string/title_estate"
-        tools:layout="@layout/fragment_estate_list" />
+        tools:layout="@layout/fragment_estate_list" >
+        <action
+            android:id="@+id/action_EstateFragment_to_housesTitleFragment"
+            app:destination="@id/housesTitleFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/RoomsFragment"
         android:name="edu.hkbu.comp.comp4097.estaterentalapp.ui.Rooms.RoomsFragment"
         android:label="@string/title_rooms"
-        tools:layout="@layout/fragment_rooms_list" />
+        tools:layout="@layout/fragment_rooms_list" >
+        <action
+            android:id="@+id/action_RoomsFragment_to_housesTitleFragment"
+            app:destination="@id/housesTitleFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/housesTitleFragment"
+        android:name="edu.hkbu.comp.comp4097.estaterentalapp.ui.HouseTitle.housesTitleFragment"
+        android:label="@string/title_houses_list"
+        tools:layout="@layout/fragment_houses_title_list" />
 
 
 </navigation>

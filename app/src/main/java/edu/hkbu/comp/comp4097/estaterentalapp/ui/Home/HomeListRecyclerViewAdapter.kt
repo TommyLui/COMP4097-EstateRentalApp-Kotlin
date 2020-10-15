@@ -1,4 +1,4 @@
-package edu.hkbu.comp.comp4097.estaterentalapp.ui.Houses
+package edu.hkbu.comp.comp4097.estaterentalapp.ui.Home
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import com.squareup.picasso.Picasso
 import edu.hkbu.comp.comp4097.estaterentalapp.data.Houses
 import edu.hkbu.comp.comp4097.estaterentalapp.R
 
-import edu.hkbu.comp.comp4097.estaterentalapp.ui.Houses.dummy.DummyContent.DummyItem
+import edu.hkbu.comp.comp4097.estaterentalapp.ui.Home.dummy.DummyContent.DummyItem
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem].

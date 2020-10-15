@@ -1,13 +1,9 @@
-package edu.hkbu.comp.comp4097.estaterentalapp.ui.Houses
+package edu.hkbu.comp.comp4097.estaterentalapp.ui.Home
 
 import android.util.Log
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
 import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
-import java.net.URLEncoder
 
 class Network {
     companion object {

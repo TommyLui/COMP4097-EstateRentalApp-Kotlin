@@ -9,13 +9,11 @@ import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import edu.hkbu.comp.comp4097.estaterentalapp.data.AppDatabase
-import edu.hkbu.comp.comp4097.estaterentalapp.ui.Houses.HomeListRecyclerViewAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,7 +31,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.userFragment ,R.id.HomeFragment, R.id.EstateFragment, R.id.RoomsFragment))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        
+
         if (isOnline(context = this@MainActivity)){
             CoroutineScope(Dispatchers.IO).launch {
                 val dao = AppDatabase.getInstance(context = this@MainActivity, true).housesDao()

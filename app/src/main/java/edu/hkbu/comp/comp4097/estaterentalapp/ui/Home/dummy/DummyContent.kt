@@ -1,4 +1,4 @@
-package edu.hkbu.comp.comp4097.estaterentalapp.ui.Houses.dummy
+package edu.hkbu.comp.comp4097.estaterentalapp.ui.Home.dummy
 
 import java.util.ArrayList
 import java.util.HashMap

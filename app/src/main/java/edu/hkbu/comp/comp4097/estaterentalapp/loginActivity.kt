@@ -7,7 +7,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import edu.hkbu.comp.comp4097.estaterentalapp.data.AccountInfo
-import edu.hkbu.comp.comp4097.estaterentalapp.ui.Houses.Network
+import edu.hkbu.comp.comp4097.estaterentalapp.ui.Home.Network
 import kotlinx.android.synthetic.main.layout_login_page.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -4,11 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import edu.hkbu.comp.comp4097.estaterentalapp.data.AccountInfo
-import edu.hkbu.comp.comp4097.estaterentalapp.ui.Houses.Network
-import kotlinx.android.synthetic.main.layout_login_page.*
+import edu.hkbu.comp.comp4097.estaterentalapp.ui.Home.Network
 import kotlinx.android.synthetic.main.layout_logout_page.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

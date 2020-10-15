@@ -1,4 +1,4 @@
-package edu.hkbu.comp.comp4097.estaterentalapp.ui.Houses
+package edu.hkbu.comp.comp4097.estaterentalapp.ui.Home
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -14,11 +14,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import edu.hkbu.comp.comp4097.estaterentalapp.*
 import edu.hkbu.comp.comp4097.estaterentalapp.data.AppDatabase
-import edu.hkbu.comp.comp4097.estaterentalapp.data.Houses
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -9,7 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import edu.hkbu.comp.comp4097.estaterentalapp.R
+import edu.hkbu.comp.comp4097.estaterentalapp.data.AppDatabase
+import edu.hkbu.comp.comp4097.estaterentalapp.ui.Estate.EstateRecyclerViewAdapter
 import edu.hkbu.comp.comp4097.estaterentalapp.ui.Rooms.dummy.DummyContent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * A fragment representing a list of Items.
@@ -39,7 +44,8 @@ class RoomsFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = RoomRecyclerViewAdapter(DummyContent.ITEMS)
+                val roomList = listOf<String>("Bedrooms <= 2", "Bedrooms >= 3")
+                adapter = RoomRecyclerViewAdapter(roomList)
             }
         }
         return view

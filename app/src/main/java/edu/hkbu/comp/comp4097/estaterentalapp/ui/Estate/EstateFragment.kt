@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import edu.hkbu.comp.comp4097.estaterentalapp.R
-import edu.hkbu.comp.comp4097.estaterentalapp.ui.Estate.dummy.DummyContent
 
 /**
  * A fragment representing a list of Items.
@@ -39,7 +38,8 @@ class EstateFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = EstateRecyclerViewAdapter(DummyContent.ITEMS)
+                val estateList = listOf<String>("Whampoa Garden", "Ocean Shores", "LOHAS Park", "City One Shatin","Festival City")
+                adapter = EstateRecyclerViewAdapter(estateList)
             }
         }
         return view

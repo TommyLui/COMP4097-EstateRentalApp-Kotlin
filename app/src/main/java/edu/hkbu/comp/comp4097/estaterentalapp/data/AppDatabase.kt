@@ -1,18 +1,15 @@
 package edu.hkbu.comp.comp4097.estaterentalapp.data
 import android.content.Context
 import android.util.Log
-import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import edu.hkbu.comp.comp4097.estaterentalapp.ui.Houses.HomeListRecyclerViewAdapter
-import edu.hkbu.comp.comp4097.estaterentalapp.ui.Houses.Network
+import edu.hkbu.comp.comp4097.estaterentalapp.ui.Home.Network
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.internal.Internal.instance
 
 @Database(entities = arrayOf(Houses::class), version = 1)
 abstract class AppDatabase : RoomDatabase() {
