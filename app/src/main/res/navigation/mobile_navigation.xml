@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_userFragment_to_logoutFragment"
             app:destination="@id/logoutFragment" />
+        <action
+            android:id="@+id/action_userFragment_to_housesTitleFragment"
+            app:destination="@id/housesTitleFragment" />
     </fragment>
 
     <fragment

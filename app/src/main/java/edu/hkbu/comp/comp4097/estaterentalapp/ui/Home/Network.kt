@@ -1,7 +1,10 @@
 package edu.hkbu.comp.comp4097.estaterentalapp.ui.Home
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import java.lang.Exception
+import java.net.HttpCookie
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -24,7 +27,7 @@ class Network {
             return builder.toString()
         }
 
-        fun userLogin(url: String, userName: String, password: String) :String {
+        fun userLogin(url: String, userName: String, password: String, sharedPreferences: SharedPreferences) :String {
             val builder = StringBuilder()
 
             try {
@@ -40,6 +43,18 @@ class Network {
                     flush()
                 }
                 Log.d("Network", "responseCode: " + connection.responseCode.toString())
+                val cookie = HttpCookie.parse(
+                    connection.getHeaderField("Set-Cookie")
+                ).get(0).toString()
+
+                if (sharedPreferences != null) {
+                    sharedPreferences.edit()
+                        .putString("cookie", cookie.toString())
+                        .apply()
+                }
+
+                Log.d("Network",  "Cookei: ${sharedPreferences.getString("cookie", "")}")
+
                 var data: Int = connection.inputStream.read()
                 Log.d("Network",  "login checkpoint 2")
                 while (data != -1) {
@@ -71,6 +86,56 @@ class Network {
                 builder.append("error")
             }
             Log.d("Network", builder.toString())
+
+            return builder.toString()
+        }
+
+        fun getRental(url: String, cookie: String) : String {
+            val builder = StringBuilder()
+            Log.d("Network", "Function: getRental() executing...")
+//            try {
+                val connection =
+                    URL(url).openConnection() as HttpURLConnection
+                Log.d("Network", "Make connection to: ${url}")
+                connection.setRequestProperty("Cookie", cookie.toString())
+                Log.d("Network", "responseCode: ${connection.responseCode}")
+                var data: Int = connection.inputStream.read()
+                Log.d("Network", "Data inputting")
+                while (data != -1) {
+                    builder.append(data.toChar())
+                    data = connection.inputStream.read()
+                }
+//            }catch (e : Exception){
+//                Log.d("Network", "Exception: ${e}")
+//                builder.append("error")
+//            }
+            Log.d("Network", "Data got: ${builder.toString()}")
+
+            return builder.toString()
+        }
+
+        fun addRental(url: String, cookie: String, id: Int) : String {
+            val builder = StringBuilder()
+            Log.d("Network", "Function: addRental() executing...")
+//            try {
+            val connection =
+                URL(url+id.toString()).openConnection() as HttpURLConnection
+            Log.d("Network", "Make connection to: ${url+ id.toString()}")
+            connection.setRequestProperty("Cookie", cookie.toString())
+            connection.requestMethod = "POST"
+            connection.doOutput = true
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
+            val sendInfo = "fk="+id
+
+            connection.outputStream.apply {
+                write(sendInfo.toByteArray())
+                flush()
+            }
+
+            Log.d("Network", "responseCode: ${connection.responseCode}")
+            builder.append(connection.responseCode)
+
+            Log.d("Network", "Data got: ${builder.toString()}")
 
             return builder.toString()
         }

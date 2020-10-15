@@ -1,5 +1,6 @@
 package edu.hkbu.comp.comp4097.estaterentalapp.ui.HouseTitle
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,6 +12,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import edu.hkbu.comp.comp4097.estaterentalapp.R
 import edu.hkbu.comp.comp4097.estaterentalapp.data.AppDatabase
 import edu.hkbu.comp.comp4097.estaterentalapp.data.Houses
@@ -47,8 +50,10 @@ class housesTitleFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
+                val sharedPreferences = activity?.getSharedPreferences("loginInfo", Context.MODE_PRIVATE)
                 val estateName = arguments?.getString("estateName")
                 val roomNum = arguments?.getString("roomNum")
+                val rentalRecords = arguments?.getString("rentalRecords")
                 Log.d ("DB","HouseTitle value executing:${estateName} && ${roomNum}")
 
                 if ( estateName != null) {
@@ -75,6 +80,21 @@ class housesTitleFragment : Fragment() {
                         }
                         CoroutineScope(Dispatchers.Main).launch {
                             adapter = housesTitleRecyclerViewAdapter(houses)
+                        }
+                    }
+                    (activity as
+                            AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                }
+
+                if(rentalRecords != null){
+                    Log.d("Network", "json to list")
+                    var json = sharedPreferences?.getString("rentals", "")
+                    val rentalInfo = Gson().fromJson<List<Houses>>(json, object :
+                    TypeToken<List<Houses>>() {}.type)
+                    Log.d("Network", rentalInfo.toString())
+                    CoroutineScope(Dispatchers.IO).launch {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            adapter = housesTitleRecyclerViewAdapter(rentalInfo)
                         }
                     }
                     (activity as

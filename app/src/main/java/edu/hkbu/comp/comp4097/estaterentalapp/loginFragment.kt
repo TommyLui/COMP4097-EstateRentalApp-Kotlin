@@ -90,11 +90,11 @@ class loginFragment : Fragment() {
         // Inflate the layout for this fragment
         loginView = inflater.inflate(R.layout.fragment_login, container, false)
 
-                loginView.loginbtn.setOnClickListener {
+            loginView.loginbtn.setOnClickListener {
             var loginetext = loginView.usernameetext.text.toString()
-//            Toast.makeText(this, loginetext.text, Toast.LENGTH_SHORT).show()
+//          Toast.makeText(this, loginetext.text, Toast.LENGTH_SHORT).show()
             var passwordetext = loginView.passwordetext.text.toString()
-//            Toast.makeText(this, passwordetext.text, Toast.LENGTH_SHORT).show()
+//          Toast.makeText(this, passwordetext.text, Toast.LENGTH_SHORT).show()
 
             var sharedPreferences = this.activity?.getSharedPreferences("loginInfo", Context.MODE_PRIVATE)
 
@@ -107,13 +107,18 @@ class loginFragment : Fragment() {
 
             val LOGIN_URL = "https://morning-plains-00409.herokuapp.com/user/login"
             CoroutineScope(Dispatchers.IO).launch {
-                val json = Network.userLogin(LOGIN_URL, loginetext, passwordetext)
+                val json = sharedPreferences?.let { it1 ->
+                    Network.userLogin(LOGIN_URL, loginetext, passwordetext,
+                        it1
+                    )
+                }
+
                 if (json.toString() != "error") {
-                    Log.d("Network", "login checkpoint 4")
+//                    Log.d("Network", "login checkpoint 4")
 //                Log.d("Network", json.toString())
                     val accountInfo = Gson().fromJson<AccountInfo>(json, object :
                         TypeToken<AccountInfo>() {}.type)
-                    Log.d("Network", "login checkpoint 5")
+//                    Log.d("Network", "login checkpoint 5")
 //                Log.d("Network", accountInfo.toString())
                     if (sharedPreferences != null) {
                         sharedPreferences.edit()

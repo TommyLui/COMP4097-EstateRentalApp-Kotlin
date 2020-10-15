@@ -41,15 +41,14 @@ class logoutFragment : Fragment() {
             val LOGOUT_URL = "https://morning-plains-00409.herokuapp.com/user/logout"
             CoroutineScope(Dispatchers.IO).launch {
                 val json = Network.userLogout(LOGOUT_URL)
-                Log.d("Network", "logout checkpoint 4")
 //                Log.d("Network", json.toString())
-                Log.d("Network", "logout checkpoint 5")
                 var sharedPreferences = activity?.getSharedPreferences("loginInfo", Context.MODE_PRIVATE)
                 if (sharedPreferences != null) {
                     sharedPreferences.edit()
                         .putString("loginState", "logout")
                         .apply()
                 }
+                Log.d("Network", "Logout successful!")
                 CoroutineScope(Dispatchers.Main).launch {
                     Toast.makeText(activity, "Logout successful!", Toast.LENGTH_SHORT).show()
                     it.findNavController().navigate(

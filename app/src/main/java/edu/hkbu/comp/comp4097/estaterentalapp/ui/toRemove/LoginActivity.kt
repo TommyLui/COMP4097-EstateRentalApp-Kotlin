@@ -1,6 +1,7 @@
 package edu.hkbu.comp.comp4097.estaterentalapp.ui.toRemove
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
@@ -36,14 +37,14 @@ class loginActivity : AppCompatActivity() {
                 .putString("password", passwordetext.text.toString())
                 .apply()
 
-            login(loginetext.text.toString(), passwordetext.text.toString())
+            login(loginetext.text.toString(), passwordetext.text.toString(), sharedPreferences)
         }
     }
 
-    fun login(userName: String, password: String){
+    fun login(userName: String, password: String, sharedPreferences : SharedPreferences){
         val LOGIN_URL = "https://morning-plains-00409.herokuapp.com/user/login"
         CoroutineScope(Dispatchers.IO).launch {
-                val json = Network.userLogin(LOGIN_URL, userName, password)
+                val json = Network.userLogin(LOGIN_URL, userName, password, sharedPreferences)
                 if (json.toString() != "error") {
                     Log.d("Network", "login checkpoint 4")
 //                Log.d("Network", json.toString())
