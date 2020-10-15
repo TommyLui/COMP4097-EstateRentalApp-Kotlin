@@ -1,4 +1,4 @@
-package edu.hkbu.comp.comp4097.estaterentalapp
+package edu.hkbu.comp.comp4097.estaterentalapp.ui.toRemove
 
 import android.content.Context
 import android.os.Bundle
@@ -8,19 +8,20 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import edu.hkbu.comp.comp4097.estaterentalapp.data.AccountInfo
 import edu.hkbu.comp.comp4097.estaterentalapp.ui.Home.Network
-import kotlinx.android.synthetic.main.layout_login_page.*
+import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import edu.hkbu.comp.comp4097.estaterentalapp.R
 
 
 class loginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.layout_login_page)
+        setContentView(R.layout.fragment_login)
 
         loginbtn.setOnClickListener {
             var loginetext = findViewById(R.id.usernameetext) as EditText

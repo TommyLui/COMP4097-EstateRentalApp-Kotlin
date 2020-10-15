@@ -1,11 +1,14 @@
 package edu.hkbu.comp.comp4097.estaterentalapp
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
 import com.squareup.picasso.Picasso
 import edu.hkbu.comp.comp4097.estaterentalapp.data.AppDatabase
 import edu.hkbu.comp.comp4097.estaterentalapp.data.Houses
@@ -16,11 +19,6 @@ import kotlinx.android.synthetic.main.fragment_user.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
@@ -51,6 +49,7 @@ class detailFragment : Fragment() {
         return detailView
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onResume() {
         super.onResume()
 
@@ -63,9 +62,17 @@ class detailFragment : Fragment() {
                 CoroutineScope(Dispatchers.Main).launch {
                     if (houses != null) {
                         Picasso.get().load(houses.image_URL).into(detailView.imageView)
-                        detailView.textView4.setText("${houses.property_title}")
+                        detailView.textView4.setText(houses.property_title)
                         detailView.textView5.setText("Estate: ${houses.estate}, Bedroom: ${houses.bedrooms}")
                         detailView.textView6.setText("Rent: $${houses.rent}, Tenants: ${houses.expected_tenants}, Area: ${houses.gross_area}")
+
+                        detailView.button2.setOnClickListener {
+                            var housesLocation = houses.estate + ", Hong Kong"
+                            it.findNavController().navigate(
+                                R.id.action_detailFragment_to_mapsFragment,
+                                bundleOf(Pair("housesLocation", housesLocation.toString()))
+                            )
+                        }
                     }
                 }
             }

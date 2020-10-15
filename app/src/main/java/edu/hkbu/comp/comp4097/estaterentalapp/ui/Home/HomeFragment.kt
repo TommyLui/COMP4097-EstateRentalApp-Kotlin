@@ -5,16 +5,16 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import edu.hkbu.comp.comp4097.estaterentalapp.*
+import edu.hkbu.comp.comp4097.estaterentalapp.R
 import edu.hkbu.comp.comp4097.estaterentalapp.data.AppDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +29,10 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val layoutInflater = LayoutInflater.from(context)
+
+//        onCreateView(layoutInflater, null, null)
 
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
@@ -48,12 +52,12 @@ class HomeFragment : Fragment() {
                 swipeLayout.isRefreshing = true
                 CoroutineScope(Dispatchers.IO).launch {
                     val dao = AppDatabase.getInstance(requireContext(), true).housesDao()
-                    Log.d("DB",  "DB checkpoint 7")
+                    Log.d("DB", "DB checkpoint 7")
                     val houses = dao.findAllHouses()
 //                Log.d("DB",  houses.toString())
                     CoroutineScope(Dispatchers.Main).launch {
                         recyclerView.adapter = HomeListRecyclerViewAdapter(houses)
-                        Log.d("DB",  "DB checkpoint 8")
+                        Log.d("DB", "DB checkpoint 8")
                     }
                 }
                 (activity as
@@ -68,13 +72,13 @@ class HomeFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         CoroutineScope(Dispatchers.IO).launch {
             val dao = AppDatabase.getInstance(requireContext()).housesDao()
-            Log.d("DB",  "DB checkpoint 7")
+            Log.d("DB", "DB checkpoint 7")
             val houses = dao.findAllHouses()
 //            Log.d("DB",  "DB checkpoint 8")
 //            Log.d("DB",  houses.toString())
             CoroutineScope(Dispatchers.Main).launch {
                 recyclerView.adapter = HomeListRecyclerViewAdapter(houses)
-                Log.d("DB",  "DB checkpoint 8")
+                Log.d("DB", "DB checkpoint 8")
             }
         }
         (activity as
@@ -83,30 +87,11 @@ class HomeFragment : Fragment() {
         return swipeLayout
     }
 
-//    private fun reloadData(recyclerView: RecyclerView) {
-//        val HOUSES_URL = "https://morning-plains-00409.herokuapp.com/property/json"
-//        CoroutineScope(Dispatchers.IO).launch {
-//            try {
-//                val json = Network.getTextFromNetwork(HOUSES_URL)
-//                Log.d("Network",  "house checkpoint 4")
-////                Log.d("Network",  json.toString())
-//                val houses = Gson().fromJson<List<Houses>>(json,object :
-//                    TypeToken<List<Houses>>() {}.type)
-//                Log.d("Network",  "house checkpoint 5")
-////                Log.d("Network",  houses.toString())
-//                CoroutineScope(Dispatchers.Main).launch {
-//                    recyclerView.adapter = HomeListRecyclerViewAdapter(houses)
-//                }
-//            } catch (e: Exception) {
-//                Log.d("Network", "Error in loading data")
-//                val houses =
-//                        listOf(Houses("", "", "","Please check your network connection","Cannot fetch houses", "","","","","","",""))
-//                CoroutineScope(Dispatchers.Main).launch {
-//                    recyclerView.adapter = HomeListRecyclerViewAdapter(houses)
-//                }
-//            }
-//        }
-//    }
+    override fun onResume() {
+        super.onResume()
+
+
+    }
 
     companion object {
         // TODO: Customize parameter argument names

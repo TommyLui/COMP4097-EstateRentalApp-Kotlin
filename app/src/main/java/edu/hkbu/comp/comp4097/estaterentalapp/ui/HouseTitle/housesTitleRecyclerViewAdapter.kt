@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
 import edu.hkbu.comp.comp4097.estaterentalapp.R
 import edu.hkbu.comp.comp4097.estaterentalapp.data.Houses
 
@@ -33,6 +35,15 @@ class housesTitleRecyclerViewAdapter(
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val contentView: TextView = view.findViewById(R.id.content)
+
+        init {
+            view.setOnClickListener {
+                it.findNavController().navigate(
+                    R.id.action_housesTitleFragment_to_detailFragment,
+                    bundleOf(Pair("housesName", contentView.text.toString()))
+                )
+            }
+        }
 
         override fun toString(): String {
             return super.toString() + " '" + contentView.text + "'"

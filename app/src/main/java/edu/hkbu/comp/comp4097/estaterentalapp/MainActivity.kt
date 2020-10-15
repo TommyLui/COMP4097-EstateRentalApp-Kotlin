@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -42,6 +43,11 @@ class MainActivity : AppCompatActivity() {
             Log.d("DB",  "Open App init DB fail!")
             Toast.makeText(this, "Open App Init DB fail by Network problem!", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        findNavController(R.id.nav_host_fragment).popBackStack()
+        return true
     }
 
     override fun onResume() {

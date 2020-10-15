@@ -9,7 +9,14 @@
         android:id="@+id/userFragment"
         android:name="edu.hkbu.comp.comp4097.estaterentalapp.userFragment"
         android:label="@string/title_user"
-        tools:layout="@layout/fragment_user" />
+        tools:layout="@layout/fragment_user" >
+        <action
+            android:id="@+id/action_userFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_userFragment_to_logoutFragment"
+            app:destination="@id/logoutFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/HomeFragment"
@@ -45,13 +52,44 @@
         android:id="@+id/housesTitleFragment"
         android:name="edu.hkbu.comp.comp4097.estaterentalapp.ui.HouseTitle.housesTitleFragment"
         android:label="@string/title_houses_list"
-        tools:layout="@layout/fragment_houses_title_list" />
+        tools:layout="@layout/fragment_houses_title_list" >
+        <action
+            android:id="@+id/action_housesTitleFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/detailFragment"
         android:name="edu.hkbu.comp.comp4097.estaterentalapp.detailFragment"
-        android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail" />
+        android:label="@string/title_detail_page"
+        tools:layout="@layout/fragment_detail" >
+        <action
+            android:id="@+id/action_detailFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="edu.hkbu.comp.comp4097.estaterentalapp.MapsFragment"
+        android:label="@string/title_map"
+        tools:layout="@layout/fragment_maps" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="edu.hkbu.comp.comp4097.estaterentalapp.loginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_userFragment"
+            app:destination="@id/userFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/logoutFragment"
+        android:name="edu.hkbu.comp.comp4097.estaterentalapp.logoutFragment"
+        android:label="fragment_logout"
+        tools:layout="@layout/fragment_logout" >
+        <action
+            android:id="@+id/action_logoutFragment_to_userFragment"
+            app:destination="@id/userFragment" />
+    </fragment>
 
 
 </navigation>

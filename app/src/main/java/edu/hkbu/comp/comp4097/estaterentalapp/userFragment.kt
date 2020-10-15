@@ -1,18 +1,17 @@
 package edu.hkbu.comp.comp4097.estaterentalapp
 
 import android.content.Context
-import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_user.view.*
-import java.net.URL
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -32,15 +31,15 @@ class userFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    lateinit var myView: View
+    lateinit var userView: View
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        myView = inflater.inflate(R.layout.fragment_user, container, false)
+        userView = inflater.inflate(R.layout.fragment_user, container, false)
 
-        return myView
+        return userView
     }
 
     override fun onResume(){
@@ -51,29 +50,29 @@ class userFragment : Fragment() {
         var userIcon = sharedPreferences.getString("userIcon", "")
         var username = sharedPreferences.getString("username", "")
 
-        myView.loginPageBtn.setOnClickListener {
+        userView.loginPageBtn.setOnClickListener {
             if (loginState == "logout") {
-                val intent = Intent(getActivity(), loginActivity::class.java)
-                getActivity()?.startActivity(intent)
+                it.findNavController().navigate(
+                    R.id.action_userFragment_to_loginFragment)
             }else{
-                val intent = Intent(getActivity(), logoutActivity::class.java)
-                getActivity()?.startActivity(intent)
+                it.findNavController().navigate(
+                    R.id.action_userFragment_to_logoutFragment)
             }
         }
 
-        myView.debugbtn.setOnClickListener {
+        userView.debugbtn.setOnClickListener {
             Toast.makeText(getActivity(), loginState.toString(), Toast.LENGTH_SHORT).show()
         }
 
         Log.d("Network", "State: ${loginState}")
 
         if (loginState == "logout"){
-            myView.userIcon.setImageResource(R.mipmap.man_foreground);
-            myView.userName.setText("User Name")
+            userView.userIcon.setImageResource(R.mipmap.man_foreground);
+            userView.userName.setText("User Name")
         }
         else if (loginState == "login"){
-            Picasso.get().load(userIcon).into(myView.userIcon)
-            myView.userName.setText(username)
+            Picasso.get().load(userIcon).into(userView.userIcon)
+            userView.userName.setText(username)
         }
     }
 
