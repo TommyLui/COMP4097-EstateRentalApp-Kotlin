@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.os.bundleOf
+import androidx.navigation.findNavController
 import com.squareup.picasso.Picasso
 import edu.hkbu.comp.comp4097.estaterentalapp.data.Houses
 import edu.hkbu.comp.comp4097.estaterentalapp.R
@@ -40,11 +42,21 @@ class HomeListRecyclerViewAdapter(
     }
 
     override fun getItemCount(): Int = values.size
+
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val housesImageView: ImageView = view.findViewById(R.id.housesImageView)
         val titleTextView: TextView = view.findViewById(R.id.titleTextView)
         val locationTextView: TextView = view.findViewById(R.id.locationTextView)
         val priceTextView: TextView = view.findViewById(R.id.priceTextView)
+
+        init {
+            view.setOnClickListener {
+                it.findNavController().navigate(
+                    R.id.action_HomeFragment_to_detailFragment,
+                    bundleOf(Pair("housesName", titleTextView.text.toString()))
+                )
+            }
+        }
 
         override fun toString(): String {
             return super.toString() + " '" + titleTextView.text + "'"

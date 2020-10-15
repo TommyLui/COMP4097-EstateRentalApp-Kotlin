@@ -6,7 +6,8 @@
     <string name="title_user">User</string>
     <string name="title_estate">Estate</string>
     <string name="title_rooms">Rooms</string>
-    <string name="title_houses_list">Houses List</string>
+    <string name="title_houses_list">Houses Lists</string>
+    <string name="title_detail_page">Houses Details</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <!-- Preference Titles -->

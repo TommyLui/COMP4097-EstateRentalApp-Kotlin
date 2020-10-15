@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.layout_user_function.view.*
+import kotlinx.android.synthetic.main.fragment_user.view.*
 import java.net.URL
 
 
@@ -30,8 +30,6 @@ class userFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
     }
 
     lateinit var myView: View
@@ -40,7 +38,7 @@ class userFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        myView = inflater.inflate(R.layout.layout_user_function, container, false)
+        myView = inflater.inflate(R.layout.fragment_user, container, false)
 
         return myView
     }

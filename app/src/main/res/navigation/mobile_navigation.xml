@@ -15,7 +15,12 @@
         android:id="@+id/HomeFragment"
         android:name="edu.hkbu.comp.comp4097.estaterentalapp.ui.Home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_houses_list" />
+        tools:layout="@layout/fragment_houses_list" >
+        <action
+            android:id="@+id/action_HomeFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/EstateFragment"
         android:name="edu.hkbu.comp.comp4097.estaterentalapp.ui.Estate.EstateFragment"
@@ -41,6 +46,12 @@
         android:name="edu.hkbu.comp.comp4097.estaterentalapp.ui.HouseTitle.housesTitleFragment"
         android:label="@string/title_houses_list"
         tools:layout="@layout/fragment_houses_title_list" />
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="edu.hkbu.comp.comp4097.estaterentalapp.detailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" />
 
 
 </navigation>

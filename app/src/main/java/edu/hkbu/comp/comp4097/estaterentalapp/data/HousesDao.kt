@@ -18,6 +18,9 @@ interface HousesDao {
     @Query("Select * from houses where bedrooms >= :roomNum")
     suspend fun findAllHousesByRoomsLargerThan(roomNum : Int): List<Houses>
 
+    @Query("Select * from houses where property_title = :housesName")
+    suspend fun findAllHousesByHousesTitle(housesName : String): Houses
+
     @Delete
     suspend fun delete(vararg houses: Houses)
 
