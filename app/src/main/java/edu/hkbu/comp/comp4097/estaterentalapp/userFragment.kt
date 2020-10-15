@@ -95,7 +95,7 @@ class userFragment : Fragment() {
                     }
                 }else{
                     CoroutineScope(Dispatchers.Main).launch {
-                        Toast.makeText(activity, "Not yet login!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity, "Please login first!", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

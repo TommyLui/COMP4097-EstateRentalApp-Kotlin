@@ -140,5 +140,31 @@ class Network {
             return builder.toString()
         }
 
+        fun dropRental(url: String, cookie: String, id: Int) : String {
+            val builder = StringBuilder()
+            Log.d("Network", "Function: dropRental() executing...")
+//            try {
+            val connection =
+                URL(url+id.toString()).openConnection() as HttpURLConnection
+            Log.d("Network", "Make connection to: ${url+ id.toString()}")
+            connection.setRequestProperty("Cookie", cookie.toString())
+            connection.requestMethod = "DELETE"
+            connection.doOutput = true
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
+            val sendInfo = "fk="+id
+
+            connection.outputStream.apply {
+                write(sendInfo.toByteArray())
+                flush()
+            }
+
+            Log.d("Network", "responseCode: ${connection.responseCode}")
+            builder.append(connection.responseCode)
+
+            Log.d("Network", "Data got: ${builder.toString()}")
+
+            return builder.toString()
+        }
+
     }
 }

@@ -90,7 +90,7 @@ class housesTitleFragment : Fragment() {
                     Log.d("Network", "json to list")
                     var json = sharedPreferences?.getString("rentals", "")
                     val rentalInfo = Gson().fromJson<List<Houses>>(json, object :
-                    TypeToken<List<Houses>>() {}.type)
+                        TypeToken<List<Houses>>() {}.type)
                     Log.d("Network", rentalInfo.toString())
                     CoroutineScope(Dispatchers.IO).launch {
                         CoroutineScope(Dispatchers.Main).launch {
@@ -103,6 +103,12 @@ class housesTitleFragment : Fragment() {
             }
         }
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+
     }
 
     companion object {

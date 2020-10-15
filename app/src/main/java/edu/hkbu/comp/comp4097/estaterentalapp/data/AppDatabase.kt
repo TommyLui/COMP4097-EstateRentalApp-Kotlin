@@ -17,18 +17,23 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         private var instance: AppDatabase? = null
         suspend fun getInstance(context: Context, doInitDB: Boolean = false) : AppDatabase {
-            Log.d("DB",  "DB checkpoint 1")
+            Log.d("DB",  "Check instance already build?")
             if (instance != null && doInitDB == false)
                 return instance!!
             //build an instance
-            Log.d("DB",  "DB checkpoint 2")
+            Log.d("DB",  "Create instance")
             instance = Room.databaseBuilder(context, AppDatabase::class.java,
                 "HousesInfo").build()
-            Log.d("DB",  "DB checkpoint 3")
+            Log.d("DB",  "Check database data")
             var housesInDao = instance?.housesDao()?.findAllHouses()
-            Log.d("DB",  housesInDao.toString())
+            Log.d("DB",  "DB data: ${housesInDao.toString()}")
             if (housesInDao != null) {
                 if (housesInDao.isEmpty() || doInitDB){
+                    if (housesInDao.isEmpty()){
+                        Log.d("DB",  "initDB because of empty DB")
+                    }else if(doInitDB){
+                        Log.d("DB",  "doInitDB request true")
+                    }
                     initDB()
                 }
             }
@@ -36,13 +41,13 @@ abstract class AppDatabase : RoomDatabase() {
         }
         suspend fun initDB() {
             //instance?.clearAllTables() //add this line when you are still debugging
-            Log.d("DB",  "DB checkpoint 4")
             instance?.housesDao()?.findAllHouses()?.forEach {instance?.housesDao()?.delete(it)}
+            Log.d("DB",  "DB: Remove all data")
             var HOUSES = reloadData()
-            Log.d("DB",  "DB checkpoint 5")
+            Log.d("DB",  "DB: Reload data from data")
 //            Log.d("DB",  HOUSES.toString())
             HOUSES.forEach {instance?.housesDao()?.insert(it)}
-            Log.d("DB",  "DB checkpoint 6")
+            Log.d("DB",  "DB: Reinsert all data")
         }
     }
 }
@@ -52,12 +57,12 @@ private suspend fun reloadData(): List<Houses>{
     var houses = listOf<Houses>()
     var job = CoroutineScope(Dispatchers.IO).launch {
         try {
+            Log.d("Network",  "Json: get house data")
             val json = Network.getTextFromNetwork(HOUSES_URL)
-            Log.d("Network",  "house checkpoint 4")
 //                Log.d("Network",  json.toString())
+            Log.d("Network",  "Gson: change house data")
             houses = Gson().fromJson<List<Houses>>(json,object :
                 TypeToken<List<Houses>>() {}.type)
-            Log.d("Network",  "house checkpoint 5")
 //                Log.d("Network",  houses.toString())
         } catch (e: Exception) {
             Log.d("Network", "Error in loading data")
