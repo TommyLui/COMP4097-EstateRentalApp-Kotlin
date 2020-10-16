@@ -59,6 +59,18 @@
         <action
             android:id="@+id/action_housesTitleFragment_to_detailFragment"
             app:destination="@id/detailFragment" />
+        <action
+            android:id="@+id/action_housesTitleFragment_to_HomeFragment"
+            app:destination="@id/HomeFragment" />
+        <action
+            android:id="@+id/action_housesTitleFragment_to_RoomsFragment"
+            app:destination="@id/RoomsFragment" />
+        <action
+            android:id="@+id/action_housesTitleFragment_to_EstateFragment"
+            app:destination="@id/EstateFragment" />
+        <action
+            android:id="@+id/action_housesTitleFragment_to_userFragment"
+            app:destination="@id/userFragment" />
     </fragment>
 
     <fragment
@@ -78,7 +90,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="edu.hkbu.comp.comp4097.estaterentalapp.loginFragment"
-        android:label="fragment_login"
+        android:label="@string/title_login"
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_userFragment"
@@ -87,7 +99,7 @@
     <fragment
         android:id="@+id/logoutFragment"
         android:name="edu.hkbu.comp.comp4097.estaterentalapp.logoutFragment"
-        android:label="fragment_logout"
+        android:label="@string/title_logout"
         tools:layout="@layout/fragment_logout" >
         <action
             android:id="@+id/action_logoutFragment_to_userFragment"

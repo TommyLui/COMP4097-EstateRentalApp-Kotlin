@@ -11,21 +11,25 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = arrayOf(Houses::class), version = 1)
+@Database(entities = arrayOf(Houses::class, Location::class), version = 1)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun housesDao() : HousesDao
+    abstract fun housesDao(): HousesDao
+    abstract fun locationDao(): LocationDao
+
     companion object {
         private var instance: AppDatabase? = null
         suspend fun getInstance(context: Context, doInitDB: Boolean = false) : AppDatabase {
-            Log.d("DB",  "Check instance already build?")
-            if (instance != null && doInitDB == false)
+            if (instance != null && doInitDB == false) {
+                Log.d("DB",  "Instance already build && doInitDB not requested")
+                Log.d("DB",  "Using old instance")
                 return instance!!
+            }
             //build an instance
-            Log.d("DB",  "Create instance")
             instance = Room.databaseBuilder(context, AppDatabase::class.java,
-                "HousesInfo").build()
-            Log.d("DB",  "Check database data")
+                "mainDB").build()
+            Log.d("DB",  "Created instance")
             var housesInDao = instance?.housesDao()?.findAllHouses()
+            Log.d("DB",  "Checked database data")
             Log.d("DB",  "DB data: ${housesInDao.toString()}")
             if (housesInDao != null) {
                 if (housesInDao.isEmpty() || doInitDB){
@@ -34,20 +38,20 @@ abstract class AppDatabase : RoomDatabase() {
                     }else if(doInitDB){
                         Log.d("DB",  "doInitDB request true")
                     }
-                    initDB()
+                    initHouseDB()
                 }
             }
             return instance!!
         }
-        suspend fun initDB() {
+        suspend fun initHouseDB() {
             //instance?.clearAllTables() //add this line when you are still debugging
             instance?.housesDao()?.findAllHouses()?.forEach {instance?.housesDao()?.delete(it)}
-            Log.d("DB",  "DB: Remove all data")
+            Log.d("DB",  "DB: Removed all data in housesDao")
             var HOUSES = reloadData()
-            Log.d("DB",  "DB: Reload data from data")
+            Log.d("DB",  "DB: Reloaded data from network")
 //            Log.d("DB",  HOUSES.toString())
             HOUSES.forEach {instance?.housesDao()?.insert(it)}
-            Log.d("DB",  "DB: Reinsert all data")
+            Log.d("DB",  "DB: Reinserted all data")
         }
     }
 }
@@ -57,13 +61,11 @@ private suspend fun reloadData(): List<Houses>{
     var houses = listOf<Houses>()
     var job = CoroutineScope(Dispatchers.IO).launch {
         try {
-            Log.d("Network",  "Json: get house data")
             val json = Network.getTextFromNetwork(HOUSES_URL)
-//                Log.d("Network",  json.toString())
-            Log.d("Network",  "Gson: change house data")
+            Log.d("Network",  "Json from: ${HOUSES_URL}")
+            Log.d("Network",  "Json content: ${json.toString()}")
             houses = Gson().fromJson<List<Houses>>(json,object :
                 TypeToken<List<Houses>>() {}.type)
-//                Log.d("Network",  houses.toString())
         } catch (e: Exception) {
             Log.d("Network", "Error in loading data")
             houses =
@@ -73,3 +75,67 @@ private suspend fun reloadData(): List<Houses>{
         job.join()
         return houses
 }
+
+////first version DB(only houses)
+//@Database(entities = arrayOf(Houses::class), version = 1)
+//abstract class AppDatabase : RoomDatabase() {
+//    abstract fun housesDao() : HousesDao
+//    companion object {
+//        private var instance: AppDatabase? = null
+//        suspend fun getInstance(context: Context, doInitDB: Boolean = false) : AppDatabase {
+//            Log.d("DB",  "Check instance already build?")
+//            if (instance != null && doInitDB == false)
+//                return instance!!
+//            //build an instance
+//            Log.d("DB",  "Create instance")
+//            instance = Room.databaseBuilder(context, AppDatabase::class.java,
+//                "HousesInfo").build()
+//            Log.d("DB",  "Check database data")
+//            var housesInDao = instance?.housesDao()?.findAllHouses()
+//            Log.d("DB",  "DB data: ${housesInDao.toString()}")
+//            if (housesInDao != null) {
+//                if (housesInDao.isEmpty() || doInitDB){
+//                    if (housesInDao.isEmpty()){
+//                        Log.d("DB",  "initDB because of empty DB")
+//                    }else if(doInitDB){
+//                        Log.d("DB",  "doInitDB request true")
+//                    }
+//                    initDB()
+//                }
+//            }
+//            return instance!!
+//        }
+//        suspend fun initDB() {
+//            //instance?.clearAllTables() //add this line when you are still debugging
+//            instance?.housesDao()?.findAllHouses()?.forEach {instance?.housesDao()?.delete(it)}
+//            Log.d("DB",  "DB: Remove all data")
+//            var HOUSES = reloadData()
+//            Log.d("DB",  "DB: Reload data from data")
+////            Log.d("DB",  HOUSES.toString())
+//            HOUSES.forEach {instance?.housesDao()?.insert(it)}
+//            Log.d("DB",  "DB: Reinsert all data")
+//        }
+//    }
+//}
+//
+//private suspend fun reloadData(): List<Houses>{
+//    val HOUSES_URL = "https://morning-plains-00409.herokuapp.com/property/json"
+//    var houses = listOf<Houses>()
+//    var job = CoroutineScope(Dispatchers.IO).launch {
+//        try {
+//            Log.d("Network",  "Json: get house data")
+//            val json = Network.getTextFromNetwork(HOUSES_URL)
+////                Log.d("Network",  json.toString())
+//            Log.d("Network",  "Gson: change house data")
+//            houses = Gson().fromJson<List<Houses>>(json,object :
+//                TypeToken<List<Houses>>() {}.type)
+////                Log.d("Network",  houses.toString())
+//        } catch (e: Exception) {
+//            Log.d("Network", "Error in loading data")
+//            houses =
+//                listOf(Houses("", "", "","Please check your network connection","Cannot fetch houses", "","","","","","",""))
+//        }
+//    }
+//    job.join()
+//    return houses
+//}

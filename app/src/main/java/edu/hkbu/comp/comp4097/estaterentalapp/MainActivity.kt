@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity() {
             CoroutineScope(Dispatchers.IO).launch {
                 val dao = AppDatabase.getInstance(context = this@MainActivity, true).housesDao()
                 Log.d("DB",  "Open App init DB successful!")
-//                Log.d("DB",  houses.toString())
             }
         }else{
             Log.d("DB",  "Open App init DB fail!")
@@ -48,19 +47,6 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         findNavController(R.id.nav_host_fragment).popBackStack()
         return true
-    }
-
-    override fun onResume() {
-        super.onResume()
-        //The SwitchPreferenceCompat will automatically store the preference value in a key-value dictionary.
-        if (getSharedPreferences("${packageName}_preferences",
-                0).getBoolean("dark_mode", false)) {
-            //switch to night mode
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            //switch to day mode
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
     }
 
     fun isOnline(context: Context): Boolean {

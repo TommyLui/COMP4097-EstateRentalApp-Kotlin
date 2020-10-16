@@ -5,6 +5,7 @@ import android.location.Geocoder
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,11 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import edu.hkbu.comp.comp4097.estaterentalapp.data.AppDatabase
+import edu.hkbu.comp.comp4097.estaterentalapp.data.Location
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.IOException
 
 class MapsFragment : Fragment() {
@@ -34,22 +40,46 @@ class MapsFragment : Fragment() {
          */
         lateinit var location: String
         location = arguments?.getString("housesLocation").toString()
-        var addressList: List<Address>? = null
 
-        Toast.makeText(activity, "${location} is searching",
+        CoroutineScope(Dispatchers.IO).launch {
+            val dao = AppDatabase.getInstance(requireContext()).locationDao()
+            val locationByDB : Location?
+            locationByDB = dao.findCoordinatesByEstate(location)
+            Log.d("DB", "Location found: ${locationByDB}")
+
+            if(locationByDB == null){
+            Log.d("DB", "Insert new location to locationByDB")
+            var addressList: List<Address>? = null
+            val geoCoder = Geocoder(activity)
+            try {
+                addressList = geoCoder.getFromLocationName(location, 1)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+            val address = addressList!![0]
+            Log.d("Map", "address: ${address}")
+            val latLng = LatLng(address.latitude, address.longitude)
+            Log.d("Map", "latLng: ${latLng}")
+            var newLocation = Location(location, address.latitude.toString(), address.longitude.toString())
+            dao.insert(newLocation)
+            CoroutineScope(Dispatchers.Main).launch {
+                Toast.makeText(activity, "${location} is searching",
                     Toast.LENGTH_SHORT).show()
-
-        val geoCoder = Geocoder(activity)
-        try {
-            addressList = geoCoder.getFromLocationName(location, 1)
-
-        } catch (e: IOException) {
-            e.printStackTrace()
+                googleMap!!.addMarker(MarkerOptions().position(latLng).title(location))
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18F))
+            }
+            }else{
+                Log.d("DB", "Read location from locationDao")
+                val latLng = LatLng(locationByDB.latitude.toDouble(), locationByDB.longitude.toDouble())
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(activity, "${location} is searching",
+                        Toast.LENGTH_SHORT).show()
+                    googleMap!!.addMarker(MarkerOptions().position(latLng).title(location))
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18F))
+                }
+            }
         }
-        val address = addressList!![0]
-        val latLng = LatLng(address.latitude, address.longitude)
-        googleMap!!.addMarker(MarkerOptions().position(latLng).title(location))
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18F));
+
     }
 
     override fun onCreateView(

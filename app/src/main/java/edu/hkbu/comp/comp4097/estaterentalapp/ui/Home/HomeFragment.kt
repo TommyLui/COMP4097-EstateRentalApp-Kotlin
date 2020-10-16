@@ -52,12 +52,12 @@ class HomeFragment : Fragment() {
                 swipeLayout.isRefreshing = true
                 CoroutineScope(Dispatchers.IO).launch {
                     val dao = AppDatabase.getInstance(requireContext(), true).housesDao()
-                    Log.d("DB", "DB checkpoint 7")
+//                    Log.d("DB", "DB checkpoint 7")
                     val houses = dao.findAllHouses()
 //                Log.d("DB",  houses.toString())
                     CoroutineScope(Dispatchers.Main).launch {
                         recyclerView.adapter = HomeListRecyclerViewAdapter(houses)
-                        Log.d("DB", "DB checkpoint 8")
+//                        Log.d("DB", "DB checkpoint 8")
                     }
                 }
                 (activity as
@@ -72,13 +72,11 @@ class HomeFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         CoroutineScope(Dispatchers.IO).launch {
             val dao = AppDatabase.getInstance(requireContext()).housesDao()
-            Log.d("DB", "DB checkpoint 7")
             val houses = dao.findAllHouses()
-//            Log.d("DB",  "DB checkpoint 8")
 //            Log.d("DB",  houses.toString())
             CoroutineScope(Dispatchers.Main).launch {
                 recyclerView.adapter = HomeListRecyclerViewAdapter(houses)
-                Log.d("DB", "DB checkpoint 8")
+                Log.d("DB", "DB loaded into recyclerView")
             }
         }
         (activity as

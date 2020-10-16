@@ -51,6 +51,7 @@ class HomeListRecyclerViewAdapter(
 
         init {
             view.setOnClickListener {
+
                 it.findNavController().navigate(
                     R.id.action_HomeFragment_to_detailFragment,
                     bundleOf(Pair("housesName", titleTextView.text.toString()))
