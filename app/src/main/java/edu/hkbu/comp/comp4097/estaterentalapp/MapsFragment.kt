@@ -1,7 +1,10 @@
 package edu.hkbu.comp.comp4097.estaterentalapp
 
+import android.content.Context
 import android.location.Address
 import android.location.Geocoder
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
@@ -10,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.findNavController
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -48,6 +52,7 @@ class MapsFragment : Fragment() {
             Log.d("DB", "Location found: ${locationByDB}")
 
             if(locationByDB == null){
+                if (context?.let { isOnline(it) }!!){
             Log.d("DB", "Insert new location to locationByDB")
             var addressList: List<Address>? = null
             val geoCoder = Geocoder(activity)
@@ -67,7 +72,39 @@ class MapsFragment : Fragment() {
                     Toast.LENGTH_SHORT).show()
                 googleMap!!.addMarker(MarkerOptions().position(latLng).title(location))
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18F))
-            }
+            }}else{
+                    val sharedPreferences = activity?.getSharedPreferences("loginInfo", Context.MODE_PRIVATE)
+                    var fromFragment = sharedPreferences?.getString("fromFragment", "")
+                    CoroutineScope(Dispatchers.Main).launch {
+                        Toast.makeText(activity, "Without network connection and no local data found!",
+                            Toast.LENGTH_SHORT).show()
+                        if (fromFragment == "homeFragment") {
+                            view?.findNavController()
+                                ?.navigate(
+                                    R.id.action_mapsFragment_to_HomeFragment
+                                )
+                            Log.d("Network", "Jump to Fragment: ${fromFragment}")
+                        }else if (fromFragment == "roomsFragment"){
+                            view?.findNavController()
+                                ?.navigate(
+                                    R.id.action_mapsFragment_to_RoomsFragment
+                                )
+                            Log.d("Network", "Jump to Fragment: ${fromFragment}")
+                        }else if(fromFragment == "estateFragment"){
+                            view?.findNavController()
+                                ?.navigate(
+                                    R.id.action_mapsFragment_to_EstateFragment
+                                )
+                            Log.d("Network", "Jump to Fragment: ${fromFragment}")
+                        }else if(fromFragment == "userFragment"){
+                            view?.findNavController()
+                                ?.navigate(
+                                    R.id.action_mapsFragment_to_userFragment
+                                )
+                            Log.d("Network", "Jump to Fragment: ${fromFragment}")
+                        }
+                    }
+                }
             }else{
                 Log.d("DB", "Read location from locationDao")
                 val latLng = LatLng(locationByDB.latitude.toDouble(), locationByDB.longitude.toDouble())
@@ -77,6 +114,7 @@ class MapsFragment : Fragment() {
                     googleMap!!.addMarker(MarkerOptions().position(latLng).title(location))
                     googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18F))
                 }
+
             }
         }
 
@@ -113,5 +151,26 @@ class MapsFragment : Fragment() {
                     putInt(ARG_COLUMN_COUNT, columnCount)
                 }
             }
+    }
+
+    fun isOnline(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    return true
+                }
+            }
+        }
+        return false
     }
 }

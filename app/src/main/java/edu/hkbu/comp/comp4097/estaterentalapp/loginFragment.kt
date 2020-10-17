@@ -2,6 +2,8 @@ package edu.hkbu.comp.comp4097.estaterentalapp
 
 import android.app.ProgressDialog
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -51,54 +53,63 @@ class loginFragment : Fragment() {
                 val progressDialog = ProgressDialog(context)
                 progressDialog.setMessage("loading, please wait!")
                 progressDialog.show()
-                
-            var loginetext = loginView.usernameetext.text.toString()
-//          Toast.makeText(this, loginetext.text, Toast.LENGTH_SHORT).show()
-            var passwordetext = loginView.passwordetext.text.toString()
-//          Toast.makeText(this, passwordetext.text, Toast.LENGTH_SHORT).show()
 
-            var sharedPreferences = this.activity?.getSharedPreferences("loginInfo", Context.MODE_PRIVATE)
+                if (context?.let { it1 -> isOnline(it1) }!!){
+                var loginetext = loginView.usernameetext.text.toString()
+                var passwordetext = loginView.passwordetext.text.toString()
 
-            if (sharedPreferences != null) {
-                sharedPreferences.edit()
-                    .putString("account", loginetext.toString())
-                    .putString("password", passwordetext.toString())
-                    .apply()
-            }
+                var sharedPreferences =
+                    this.activity?.getSharedPreferences("loginInfo", Context.MODE_PRIVATE)
 
-            val LOGIN_URL = "https://morning-plains-00409.herokuapp.com/user/login"
-            CoroutineScope(Dispatchers.IO).launch {
-                val json = sharedPreferences?.let { it1 ->
-                    Network.userLogin(LOGIN_URL, loginetext, passwordetext,
-                        it1
-                    )
+                if (sharedPreferences != null) {
+                    sharedPreferences.edit()
+                        .putString("account", loginetext.toString())
+                        .putString("password", passwordetext.toString())
+                        .apply()
                 }
-                if (json.toString() != "error") {
+
+                val LOGIN_URL = "https://morning-plains-00409.herokuapp.com/user/login"
+                CoroutineScope(Dispatchers.IO).launch {
+                    val json = sharedPreferences?.let { it1 ->
+                        Network.userLogin(
+                            LOGIN_URL, loginetext, passwordetext,
+                            it1
+                        )
+                    }
+                    if (json.toString() != "error") {
 //                    Log.d("Network", "login checkpoint 4")
 //                Log.d("Network", json.toString())
-                    val accountInfo = Gson().fromJson<AccountInfo>(json, object :
-                        TypeToken<AccountInfo>() {}.type)
+                        val accountInfo = Gson().fromJson<AccountInfo>(json, object :
+                            TypeToken<AccountInfo>() {}.type)
 //                    Log.d("Network", "login checkpoint 5")
 //                Log.d("Network", accountInfo.toString())
-                    if (sharedPreferences != null) {
-                        sharedPreferences.edit()
-                            .putString("loginState", "login")
-                            .putString("username", accountInfo.username.toString())
-                            .putString("userIcon", accountInfo.avatar.toString())
-                            .apply()
-                    }
-                    progressDialog.dismiss()
-                    CoroutineScope(Dispatchers.Main).launch {
-                        Toast.makeText(activity, "Login successful!", Toast.LENGTH_SHORT).show()
-                        it.findNavController().navigate(
-                        R.id.action_loginFragment_to_userFragment)
-                    }
-                }else{
-                    CoroutineScope(Dispatchers.Main).launch {
-                        Toast.makeText(activity, "Login fail!", Toast.LENGTH_SHORT).show()
+                        if (sharedPreferences != null) {
+                            sharedPreferences.edit()
+                                .putString("loginState", "login")
+                                .putString("username", accountInfo.username.toString())
+                                .putString("userIcon", accountInfo.avatar.toString())
+                                .apply()
+                        }
+                        progressDialog.dismiss()
+                        CoroutineScope(Dispatchers.Main).launch {
+                            Toast.makeText(activity, "Login successful!", Toast.LENGTH_SHORT).show()
+                            it.findNavController().navigate(
+                                R.id.action_loginFragment_to_userFragment
+                            )
+                        }
+                    } else {
+                        progressDialog.dismiss()
+                        CoroutineScope(Dispatchers.Main).launch {
+                            Toast.makeText(activity, "Wrong account or password!", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
-            }
+            }else{
+                    progressDialog.dismiss()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        Toast.makeText(activity, "Network fail!", Toast.LENGTH_SHORT).show()
+                    }
+        }
         }
 
         return loginView
@@ -116,6 +127,27 @@ class loginFragment : Fragment() {
                     putInt(ARG_COLUMN_COUNT, columnCount)
                 }
             }
+    }
+
+    fun isOnline(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager != null) {
+            val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                    return true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                    Log.i("Internet", "NetworkCapabilities.TRANSPORT_ETHERNET")
+                    return true
+                }
+            }
+        }
+        return false
     }
 
 }

@@ -54,7 +54,7 @@ class housesTitleFragment : Fragment() {
                 val estateName = arguments?.getString("estateName")
                 val roomNum = arguments?.getString("roomNum")
                 val rentalRecords = arguments?.getString("rentalRecords")
-                Log.d ("DB","HouseTitle value executing:${estateName} && ${roomNum}")
+//                Log.d ("DB","HouseTitle value executing:${estateName} && ${roomNum}")
 
                 if ( estateName != null) {
                     CoroutineScope(Dispatchers.IO).launch {

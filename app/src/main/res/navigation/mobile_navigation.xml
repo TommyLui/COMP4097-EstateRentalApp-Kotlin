@@ -86,7 +86,20 @@
         android:id="@+id/mapsFragment"
         android:name="edu.hkbu.comp.comp4097.estaterentalapp.MapsFragment"
         android:label="@string/title_map"
-        tools:layout="@layout/fragment_maps" />
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_mapsFragment_to_userFragment"
+            app:destination="@id/userFragment" />
+        <action
+            android:id="@+id/action_mapsFragment_to_HomeFragment"
+            app:destination="@id/HomeFragment" />
+        <action
+            android:id="@+id/action_mapsFragment_to_RoomsFragment"
+            app:destination="@id/RoomsFragment" />
+        <action
+            android:id="@+id/action_mapsFragment_to_EstateFragment"
+            app:destination="@id/EstateFragment" />
+    </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="edu.hkbu.comp.comp4097.estaterentalapp.loginFragment"

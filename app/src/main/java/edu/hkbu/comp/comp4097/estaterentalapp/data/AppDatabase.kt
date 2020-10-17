@@ -11,10 +11,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = arrayOf(Houses::class, Location::class), version = 1)
+@Database(entities = arrayOf(Houses::class, Location::class, myRentalHouses::class), version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun housesDao(): HousesDao
     abstract fun locationDao(): LocationDao
+    abstract fun myRentalDao(): myRentalDao
 
     companion object {
         private var instance: AppDatabase? = null

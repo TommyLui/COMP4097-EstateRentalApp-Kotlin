@@ -36,7 +36,7 @@ class Network {
                 connection.requestMethod = "POST"
                 connection.doOutput = true
                 connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded")
-                val sendInfo = "username=Brittany&password=Hutt"
+                val sendInfo = "username=${userName}&password=${password}"
 
                 connection.outputStream.apply {
                     write(sendInfo.toByteArray())
