@@ -59,12 +59,12 @@ class userFragment : Fragment() {
         var username = sharedPreferences.getString("username", "")
 
         userView.loginPageBtn.setOnClickListener {
-            if (loginState == "logout") {
-                it.findNavController().navigate(
-                    R.id.action_userFragment_to_loginFragment)
-            }else{
+            if (loginState == "login") {
                 it.findNavController().navigate(
                     R.id.action_userFragment_to_logoutFragment)
+            }else{
+                it.findNavController().navigate(
+                    R.id.action_userFragment_to_loginFragment)
             }
         }
 
@@ -81,6 +81,13 @@ class userFragment : Fragment() {
                             .putString("rentals", json.toString())
                             .apply()
                         Log.d("Network", "SharedPreferences set")
+
+                        if (sharedPreferences != null) {
+                            sharedPreferences.edit()
+                                .putString("fromFragment", "userFragment")
+                                .apply()
+                        }
+
                     CoroutineScope(Dispatchers.Main).launch {
                         Toast.makeText(activity, "Get record successful!", Toast.LENGTH_SHORT).show()
                         it.findNavController().navigate(

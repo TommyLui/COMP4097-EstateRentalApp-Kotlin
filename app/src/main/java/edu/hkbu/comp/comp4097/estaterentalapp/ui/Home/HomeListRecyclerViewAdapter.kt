@@ -1,5 +1,6 @@
 package edu.hkbu.comp.comp4097.estaterentalapp.ui.Home
 
+import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,7 @@ class HomeListRecyclerViewAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_houses_item, parent, false)
+
         return ViewHolder(view)
     }
 
@@ -49,9 +51,15 @@ class HomeListRecyclerViewAdapter(
         val locationTextView: TextView = view.findViewById(R.id.locationTextView)
         val priceTextView: TextView = view.findViewById(R.id.priceTextView)
 
+        val sharedPreferences = view.getContext().getSharedPreferences("loginInfo", Context.MODE_PRIVATE)
+
         init {
             view.setOnClickListener {
-
+                if (sharedPreferences != null) {
+                    sharedPreferences.edit()
+                        .putString("fromFragment", "homeFragment")
+                        .apply()
+                }
                 it.findNavController().navigate(
                     R.id.action_HomeFragment_to_detailFragment,
                     bundleOf(Pair("housesName", titleTextView.text.toString()))

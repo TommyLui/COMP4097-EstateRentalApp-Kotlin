@@ -1,5 +1,6 @@
 package edu.hkbu.comp.comp4097.estaterentalapp.ui.Rooms
 
+import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -36,11 +37,17 @@ class RoomRecyclerViewAdapter(
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val contentView: TextView = view.findViewById(R.id.content)
+        val sharedPreferences = view.getContext().getSharedPreferences("loginInfo", Context.MODE_PRIVATE)
 
         init {
             view.setOnClickListener {
 //                Toast.makeText(view.context, "${contentView.text.toString()} is clicked",
 //                    Toast.LENGTH_SHORT).show()
+                if (sharedPreferences != null) {
+                    sharedPreferences.edit()
+                        .putString("fromFragment", "roomsFragment")
+                        .apply()
+                }
 
                 var roomNum = 0
                 if (contentView.text.toString() == "Bedrooms <= 2"){

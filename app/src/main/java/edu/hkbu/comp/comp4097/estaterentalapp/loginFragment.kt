@@ -1,5 +1,6 @@
 package edu.hkbu.comp.comp4097.estaterentalapp
 
+import android.app.ProgressDialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -36,50 +37,6 @@ class loginFragment : Fragment() {
             columnCount = it.getInt(detailFragment.ARG_COLUMN_COUNT)
         }
 
-//        loginView.loginbtn.setOnClickListener {
-//            var loginetext = loginView.usernameetext.text.toString()
-////            Toast.makeText(this, loginetext.text, Toast.LENGTH_SHORT).show()
-//            var passwordetext = loginView.passwordetext.text.toString()
-////            Toast.makeText(this, passwordetext.text, Toast.LENGTH_SHORT).show()
-//
-//            var sharedPreferences = this.activity?.getSharedPreferences("loginInfo", Context.MODE_PRIVATE)
-//
-//            if (sharedPreferences != null) {
-//                sharedPreferences.edit()
-//                    .putString("account", loginetext.toString())
-//                    .putString("password", passwordetext.toString())
-//                    .apply()
-//            }
-
-//            val LOGIN_URL = "https://morning-plains-00409.herokuapp.com/user/login"
-//            CoroutineScope(Dispatchers.IO).launch {
-//                val json = Network.userLogin(LOGIN_URL, loginetext, passwordetext)
-//                if (json.toString() != "error") {
-//                    Log.d("Network", "login checkpoint 4")
-////                Log.d("Network", json.toString())
-//                    val accountInfo = Gson().fromJson<AccountInfo>(json, object :
-//                        TypeToken<AccountInfo>() {}.type)
-//                    Log.d("Network", "login checkpoint 5")
-////                Log.d("Network", accountInfo.toString())
-//                    if (sharedPreferences != null) {
-//                        sharedPreferences.edit()
-//                            .putString("loginState", "login")
-//                            .putString("username", accountInfo.username.toString())
-//                            .putString("userIcon", accountInfo.avatar.toString())
-//                            .apply()
-//                    }
-//                    CoroutineScope(Dispatchers.Main).launch {
-//                        Toast.makeText(activity, "Login successful!", Toast.LENGTH_SHORT).show()
-//                    }
-////                    finish()
-//                }else{
-//                    CoroutineScope(Dispatchers.Main).launch {
-//                        Toast.makeText(activity, "Login fail!", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//            }
-//        }
-
     }
 
     lateinit var loginView: View
@@ -91,6 +48,10 @@ class loginFragment : Fragment() {
         loginView = inflater.inflate(R.layout.fragment_login, container, false)
 
             loginView.loginbtn.setOnClickListener {
+                val progressDialog = ProgressDialog(context)
+                progressDialog.setMessage("loading, please wait!")
+                progressDialog.show()
+                
             var loginetext = loginView.usernameetext.text.toString()
 //          Toast.makeText(this, loginetext.text, Toast.LENGTH_SHORT).show()
             var passwordetext = loginView.passwordetext.text.toString()
@@ -112,7 +73,6 @@ class loginFragment : Fragment() {
                         it1
                     )
                 }
-
                 if (json.toString() != "error") {
 //                    Log.d("Network", "login checkpoint 4")
 //                Log.d("Network", json.toString())
@@ -127,6 +87,7 @@ class loginFragment : Fragment() {
                             .putString("userIcon", accountInfo.avatar.toString())
                             .apply()
                     }
+                    progressDialog.dismiss()
                     CoroutineScope(Dispatchers.Main).launch {
                         Toast.makeText(activity, "Login successful!", Toast.LENGTH_SHORT).show()
                         it.findNavController().navigate(

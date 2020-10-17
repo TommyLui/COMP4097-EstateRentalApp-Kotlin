@@ -1,6 +1,8 @@
 package edu.hkbu.comp.comp4097.estaterentalapp
 
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
+import android.app.ProgressDialog.show
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
@@ -63,6 +66,10 @@ class detailFragment : Fragment() {
         val housesName = arguments?.getString("housesName")
         var alreadyInRental = false
 
+        val progressDialog = ProgressDialog(context)
+        progressDialog.setMessage("loading, please wait!")
+        progressDialog.show()
+
         val getRental_URL = "https://morning-plains-00409.herokuapp.com/user/myRentals"
         CoroutineScope(Dispatchers.IO).launch {
             if (sharedPreferences.getString("loginState", "").toString() == "login") {
@@ -87,6 +94,7 @@ class detailFragment : Fragment() {
                     }
                 }
             }
+
             if(housesName != null) {
                 CoroutineScope(Dispatchers.IO).launch {
                     val dao = context?.let { AppDatabase.getInstance(it).housesDao() }
@@ -103,8 +111,10 @@ class detailFragment : Fragment() {
                                 detailView.button.setText("Move-in")
                             }
 
+                            progressDialog.dismiss()
 
                         detailView.button.setOnClickListener {
+                            var fromFragment = sharedPreferences?.getString("fromFragment", "")
                             if(sharedPreferences.getString("loginState", "") == "login"){
                             if(detailView.button.text == "Move-in"){
                             Log.d("Button", "Move-in: clicked")
@@ -135,28 +145,84 @@ class detailFragment : Fragment() {
                                                     Log.d("Network", "json got: ${json.toString()}")
                                                     if (json.toString() == "200") {
                                                         Log.d("Network", "json to list")
+                                                        Log.d("Network", "From Fragment: ${fromFragment}")
                                                         CoroutineScope(Dispatchers.Main).launch {
-//                                                            getFragmentManager()?.popBackStack()
-                                                            Toast.makeText(
-                                                                activity,
-                                                                "Add record successful!",
-                                                                Toast.LENGTH_SHORT
-                                                            ).show()
+                                                            context?.let { it1 ->
+                                                            AlertDialog.Builder(it1)
+                                                                .setMessage("Move-in successful!")
+                                                                .setCancelable(false)
+                                                                .setPositiveButton("OK") { dialog, id ->
+                                                                    if (fromFragment == "homeFragment") {
+                                                                        it.findNavController()
+                                                                            .navigate(
+                                                                                R.id.action_detailFragment_to_HomeFragment
+                                                                            )
+                                                                        Log.d("Network", "Jump to Fragment: ${fromFragment}")
+                                                                    }else if (fromFragment == "roomsFragment"){
+                                                                        it.findNavController()
+                                                                            .navigate(
+                                                                                R.id.action_detailFragment_to_RoomsFragment
+                                                                            )
+                                                                        Log.d("Network", "Jump to Fragment: ${fromFragment}")
+                                                                    }else if(fromFragment == "estateFragment"){
+                                                                        it.findNavController()
+                                                                            .navigate(
+                                                                                R.id.action_detailFragment_to_EstateFragment
+                                                                            )
+                                                                        Log.d("Network", "Jump to Fragment: ${fromFragment}")
+                                                                    }else if(fromFragment == "userFragment"){
+                                                                        it.findNavController()
+                                                                            .navigate(
+                                                                                R.id.action_detailFragment_to_userFragment
+                                                                            )
+                                                                        Log.d("Network", "Jump to Fragment: ${fromFragment}")
+                                                                    }
+                                                                }
+                                                                .show()
+                                                            }
                                                         }
-                                                    } else if (json.toString() == "409") {
+                                                    } else if (json.toString() == "422") {
                                                         CoroutineScope(Dispatchers.Main).launch {
-                                                            Toast.makeText(
-                                                                activity,
-                                                                "Record already added before!",
-                                                                Toast.LENGTH_SHORT
-                                                            ).show()
+                                                            context?.let { it1 ->
+                                                                AlertDialog.Builder(it1)
+                                                                    .setMessage("Already full")
+                                                                    .setCancelable(false)
+                                                                    .setPositiveButton("OK") {
+                                                                            dialog, id ->
+                                                                        if (fromFragment == "homeFragment") {
+                                                                            it.findNavController()
+                                                                                .navigate(
+                                                                                    R.id.action_detailFragment_to_HomeFragment
+                                                                                )
+                                                                            Log.d("Network", "Jump to Fragment: ${fromFragment}")
+                                                                        }else if (fromFragment == "roomsFragment"){
+                                                                            it.findNavController()
+                                                                                .navigate(
+                                                                                    R.id.action_detailFragment_to_RoomsFragment
+                                                                                )
+                                                                            Log.d("Network", "Jump to Fragment: ${fromFragment}")
+                                                                        }else if(fromFragment == "estateFragment"){
+                                                                            it.findNavController()
+                                                                                .navigate(
+                                                                                    R.id.action_detailFragment_to_EstateFragment
+                                                                                )
+                                                                            Log.d("Network", "Jump to Fragment: ${fromFragment}")
+                                                                        }else if(fromFragment == "userFragment"){
+                                                                            it.findNavController()
+                                                                                .navigate(
+                                                                                    R.id.action_detailFragment_to_userFragment
+                                                                                )
+                                                                            Log.d("Network", "Jump to Fragment: ${fromFragment}")
+                                                                        }
+                                                                    }
+                                                                    .show()}
                                                         }
                                                     }
                                                 } else {
                                                     CoroutineScope(Dispatchers.Main).launch {
                                                         Toast.makeText(
                                                             activity,
-                                                            "Not yet login!",
+                                                            "Error!",
                                                             Toast.LENGTH_SHORT
                                                         ).show()
                                                     }
@@ -201,12 +267,39 @@ class detailFragment : Fragment() {
                                                     if (json.toString() == "200") {
                                                         Log.d("Network", "json to list")
                                                         CoroutineScope(Dispatchers.Main).launch {
-                                                            Toast.makeText(
-                                                                activity,
-                                                                "Drop record successful!",
-                                                                Toast.LENGTH_SHORT
-                                                            ).show()
-//                                                            getFragmentManager()?.popBackStack()
+                                                            context?.let { it1 ->
+                                                                AlertDialog.Builder(it1)
+                                                                    .setMessage("Move-out successful!")
+                                                                    .setCancelable(false)
+                                                                    .setPositiveButton("OK") { dialog, id ->
+                                                                        if (fromFragment == "homeFragment") {
+                                                                            it.findNavController()
+                                                                                .navigate(
+                                                                                    R.id.action_detailFragment_to_HomeFragment
+                                                                                )
+                                                                            Log.d("Network", "Jump to Fragment: ${fromFragment}")
+                                                                        }else if (fromFragment == "roomsFragment"){
+                                                                            it.findNavController()
+                                                                                .navigate(
+                                                                                    R.id.action_detailFragment_to_RoomsFragment
+                                                                                )
+                                                                            Log.d("Network", "Jump to Fragment: ${fromFragment}")
+                                                                        }else if(fromFragment == "estateFragment"){
+                                                                            it.findNavController()
+                                                                                .navigate(
+                                                                                    R.id.action_detailFragment_to_EstateFragment
+                                                                                )
+                                                                            Log.d("Network", "Jump to Fragment: ${fromFragment}")
+                                                                        }else if(fromFragment == "userFragment"){
+                                                                            it.findNavController()
+                                                                                .navigate(
+                                                                                    R.id.action_detailFragment_to_userFragment
+                                                                                )
+                                                                            Log.d("Network", "Jump to Fragment: ${fromFragment}")
+                                                                        }
+                                                                    }
+                                                                    .show()
+                                                            }
                                                         }
                                                     } else if (json.toString() == "404") {
                                                         CoroutineScope(Dispatchers.Main).launch {
@@ -248,6 +341,16 @@ class detailFragment : Fragment() {
                 }
                 (activity as
                         AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            }
+        }
+    }
+
+    fun jumpFragment(fromFragment: String){
+        CoroutineScope(Dispatchers.Main).launch {
+            if (fromFragment == "homeFragement"){
+                this@detailFragment.findNavController().navigate(
+                    R.id.action_detailFragment_to_HomeFragment
+                )
             }
         }
     }
