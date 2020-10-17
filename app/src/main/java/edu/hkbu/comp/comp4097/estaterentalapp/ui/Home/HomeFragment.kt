@@ -32,8 +32,6 @@ class HomeFragment : Fragment() {
 
         val layoutInflater = LayoutInflater.from(context)
 
-//        onCreateView(layoutInflater, null, null)
-
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }

@@ -44,35 +44,40 @@ class MapsFragment : Fragment() {
          */
         lateinit var location: String
         location = arguments?.getString("housesLocation").toString()
+        Log.d("DB", "Location search: ${location}")
 
         CoroutineScope(Dispatchers.IO).launch {
             val dao = AppDatabase.getInstance(requireContext()).locationDao()
             val locationByDB : Location?
             locationByDB = dao.findCoordinatesByEstate(location)
-            Log.d("DB", "Location found: ${locationByDB}")
-
-            if(locationByDB == null){
-                if (context?.let { isOnline(it) }!!){
+            Log.d("DB", "Location found in DB: ${locationByDB}")
+            if(locationByDB == null || location == ""){
+          if (context?.let { isOnline(it) }!!){
             Log.d("DB", "Insert new location to locationByDB")
             var addressList: List<Address>? = null
-            val geoCoder = Geocoder(activity)
+            val geoCoder = Geocoder(context)
             try {
                 addressList = geoCoder.getFromLocationName(location, 1)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
+            Log.d("DB", "Create addressList")
             val address = addressList!![0]
-            Log.d("Map", "address: ${address}")
+            Log.d("DB", "address: ${address}")
             val latLng = LatLng(address.latitude, address.longitude)
-            Log.d("Map", "latLng: ${latLng}")
+            Log.d("DB", "latLng: ${latLng}")
+
             var newLocation = Location(location, address.latitude.toString(), address.longitude.toString())
             dao.insert(newLocation)
+
             CoroutineScope(Dispatchers.Main).launch {
                 Toast.makeText(activity, "${location} is searching",
                     Toast.LENGTH_SHORT).show()
                 googleMap!!.addMarker(MarkerOptions().position(latLng).title(location))
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18F))
-            }}else{
+            }
+
+            }else{
                     val sharedPreferences = activity?.getSharedPreferences("loginInfo", Context.MODE_PRIVATE)
                     var fromFragment = sharedPreferences?.getString("fromFragment", "")
                     CoroutineScope(Dispatchers.Main).launch {
@@ -114,10 +119,8 @@ class MapsFragment : Fragment() {
                     googleMap!!.addMarker(MarkerOptions().position(latLng).title(location))
                     googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18F))
                 }
-
             }
         }
-
     }
 
     override fun onCreateView(
